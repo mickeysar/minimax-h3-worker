@@ -18,7 +18,12 @@ import torch
 _pipe = None
 _manager = None
 
-MODEL_LOCAL_DIR = "/workspace/models/MiniMax-H3"
+# RunPod serverless mount-άρει τα network volumes στο /runpod-volume by default.
+# Τα pods mount-άρουν στο /workspace. Ψάξε και στα δύο paths.
+_MODEL_DIRS = [
+    "/runpod-volume/models/MiniMax-H3",
+    "/workspace/models/MiniMax-H3",
+]
 MODEL_REPO_ID = "MiniMaxAI/MiniMax-H3"
 
 # The single-GPU memory recipe from the diffusers MiniMax-H3 docs:
@@ -30,9 +35,10 @@ MEMORY_RESERVE_MARGIN = os.environ.get("MEMORY_RESERVE_MARGIN", "12GB")
 
 def _model_source() -> str:
     """Return the model source: the local volume dir if populated, else the HF repo id."""
-    marker = os.path.join(MODEL_LOCAL_DIR, "modular_model_index.json")
-    if os.path.isdir(MODEL_LOCAL_DIR) and os.path.exists(marker):
-        return MODEL_LOCAL_DIR
+    for d in _MODEL_DIRS:
+        marker = os.path.join(d, "modular_model_index.json")
+        if os.path.isdir(d) and os.path.exists(marker):
+            return d
     return MODEL_REPO_ID
 
 
