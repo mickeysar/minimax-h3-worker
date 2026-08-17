@@ -10,9 +10,11 @@ RUN apt-get update -qq \
 
 COPY requirements.txt /requirements.txt
 
+# Install PyPI deps first (so a diffusers git failure can't block the others),
+# then diffusers from git main (has the MiniMax-H3 pipeline).
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir runpod \
-    && pip install --no-cache-dir -r /requirements.txt
+    && pip install --no-cache-dir -r /requirements.txt \
+    && pip install --no-cache-dir "git+https://github.com/huggingface/diffusers.git"
 
 COPY rp_handler.py /rp_handler.py
 

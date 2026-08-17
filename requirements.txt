@@ -1,6 +1,4 @@
-# MiniMax-H3 serverless worker dependencies.
-# diffusers must come from git main until MiniMax-H3 lands in a PyPI release.
-git+https://github.com/huggingface/diffusers.git
+# MiniMax-H3 serverless worker dependencies (PyPI only — diffusers comes from git in the Dockerfile).
 torch>=2.4.0
 transformers>=4.45.0
 accelerate>=0.34.0
