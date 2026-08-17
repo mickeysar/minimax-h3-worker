@@ -1,6 +1,7 @@
 # MiniMax-H3 serverless worker dependencies.
 # torch, transformers, accelerate, huggingface_hub are already in the base image.
-git+https://github.com/huggingface/diffusers.git
+# diffusers from PyPI (MiniMax-H3 is in the latest release; no git install).
+diffusers>=0.34.0
 runpod>=1.7.0
 soundfile>=0.12.0
 imageio>=2.34.0
