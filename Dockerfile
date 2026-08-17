@@ -11,6 +11,7 @@ RUN apt-get update -qq \
 COPY requirements.txt /requirements.txt
 
 RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir runpod \
     && pip install --no-cache-dir -r /requirements.txt
 
 COPY rp_handler.py /rp_handler.py
