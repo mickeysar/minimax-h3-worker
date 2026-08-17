@@ -1,7 +1,31 @@
-torch>=2.4.0
-transformers>=4.45.0
+# diffusers MiniMax-H3 support exists ONLY on the git main branch.
+#
+# The last PyPI release (0.39.0) contains NO minimax module at all — verified by
+# inspecting the published wheel: diffusers/modular_pipelines/ ships anima,
+# ernie_image, flux, flux2, helios, hunyuan_video1_5, ideogram4, ltx, qwenimage,
+# stable_diffusion_3, stable_diffusion_xl, wan, z_image — no minimax anything.
+# The model's own modular_model_index.json declares
+# "_diffusers_version": "0.36.0.dev0", i.e. a dev build, never a release.
+#
+# So `diffusers>=0.39.0` from PyPI can NEVER load this model. These classes
+#   MiniMaxH3ModularPipeline / MiniMaxH3Blocks / MiniMaxH3*Reference
+#   AutoencoderKLMiniMaxH3 / MiniMaxH3Transformer3DModel / MiniMaxH3Scheduler
+# live in diffusers/modular_pipelines/minimax_h3/ on main only.
+git+https://github.com/huggingface/diffusers.git@main
+
+# --- pins required BY diffusers main (from its setup.py), not guesses ---
+# diffusers main declares torch>=2.6 and huggingface-hub>=1.23.0,<2.0.
+# The previous torch>=2.4.0 / huggingface_hub>=0.25.0 were low enough that pip
+# could resolve a combination diffusers itself does not support.
+torch>=2.6
+huggingface_hub>=1.23.0,<2.0
+
+# Qwen3VLForConditionalGeneration + Qwen3VLProcessor (per modular_model_index.json)
+# landed well after 4.45; the old transformers>=4.45.0 pin could resolve to a
+# version with no Qwen3-VL at all, so the text_encoder would fail to load.
+transformers>=4.57.0
+
 accelerate>=0.34.0
 safetensors>=0.4.3
-huggingface_hub>=0.25.0
-diffusers>=0.39.0
+hf_transfer>=0.1.6
 runpod>=1.7.0
